@@ -1,0 +1,314 @@
+
+In [7]:     D.process_all_cases(debug=False,overwrite=False)
+  0%|                                                                                                                                                            | 0/77 [00:00<?, ?it/s]
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/13/nifti
+ File /s/datasets_bkp/litq/sitk/images/litq_00014_20191119.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00000_20200124.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00015_20190705.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00013_20200102.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00001_20191121.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00001_20190815.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/10/nifi
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/25
+ File /s/datasets_bkp/litq/sitk/images/litq_00002_20191126.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00002_20190927.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/11/nifi
+ File /s/datasets_bkp/litq/sitk/images/litq_00011_20190805.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00007_20200203.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00009_20201117.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00010_20200529.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00016_20200306.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/25/DICOM/00003102/AA2E7FEE/AAF6BFCD/00001820
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/25/DICOM/00003102/AA002794/AAC6031D/0000DBE9
+ File /s/datasets_bkp/litq/sitk/images/litq_00004_20191117.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00004_20191126.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00017_20190910.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00014_20191020.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/28
+ File /s/datasets_bkp/litq/sitk/images/litq_00018_20191116.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00003_20191106.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00003_20191127.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00009_20210630.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00019_20191116.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/28/DICOM/0000EB11/AACD6080/AA0AC761/0000860B
+ File /s/datasets_bkp/litq/sitk/images/litq_00020_20191227.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00018_20200112.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00015_20200519.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/33/DICOM/00001EFC/AA6AB1B4/AA728534/00005CAC
+ File /s/datasets_bkp/litq/sitk/images/litq_00013_20191119.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00010_20200316.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00016_20190821.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00022_20220826.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00017_20191118.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00000_20191017.nrrd exists. Skipping..
+  1%|█▉                                                                                                                                                | 1/77 [00:57<1:12:44, 57.43s/it]
+ File /s/datasets_bkp/litq/sitk/images/litq_00024_20200129.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00023_20210108.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/33/DICOM/00001EFC/AACB4A9D/AA6786F7/00004A6F
+ File /s/datasets_bkp/litq/sitk/images/litq_00019_20200909.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00021_20210311.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00008_20200415.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00025_20201014.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00006_20190809.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00022_20221115.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00023_20200923.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00012_20200127.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00026_20201003.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00030_20180116.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00020_20191114.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00005_20191128.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00011_20181207.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00027_20191206.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00024_20191113.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00028_20190715.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00030_20171117.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00031_20210112.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00025_20200728.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00036_20190901.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00032_20190807.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00021_20191217.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00034_20191104.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00027_20191111.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00038_20191101.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00035_20180417.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00033_20191105.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00029_20191105.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00005_20201202.nrrd exists. Skipping..
+  8%|███████████▌                                                                                                                                        | 6/77 [02:03<22:06, 18.68s/it]
+ File /s/datasets_bkp/litq/sitk/images/litq_00035_20171016.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00036_20190917.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00026_20200526.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00031_20221122.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00029_20190223.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00034_20190909.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00032_20191106.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00040_20190827.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00042_20191227.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00041_20190716.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00045_20170830.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00037_20200217.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00047_20200222.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00047_20191028.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00043_20190131.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00048_20200227.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00048_20191026.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00049_20200218.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00044_20191029.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00046_20190926.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00038_20200107.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00046_20190128.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00051_20190216.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00040_20190716.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00053_20191017.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00012_20191119.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00043_20181231.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00055_20191111.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00044_20200106.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00056_20190618.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00006_20191129.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/15/DICOM/0000A87E/AA917107/AABB1A33/00009362
+  9%|█████████████▍                                                                                                                                      | 7/77 [02:38<25:31, 21.87s/it]
+ File /s/datasets_bkp/litq/sitk/images/litq_00028_20191110.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00037_20191101.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00045_20191029.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00041_20190522.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00042_20191029.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00008_20191123.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00058_20190320.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00007_20191128.nrrd exists. Skipping..
+ 10%|███████████████▍                                                                                                                                    | 8/77 [02:53<23:24, 20.35s/it]
+ File /s/datasets_bkp/litq/sitk/images/litq_00063_20221208.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00050_20190729.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00054_20201014.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00049_20191025.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00033_20190824.nrrd exists. Skipping..
+ 51%|██████████████████████████████████████████████████████████████████████████▍                                                                        | 39/77 [03:08<03:04,  4.85s/it]
+---------------------------------------------------------------------------
+RemoteTraceback                           Traceback (most recent call last)
+RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/ub/miniconda3/envs/dl2/lib/python3.10/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+  File "<ipython-input-5-72e411b66f20>", line 149, in process_single_case
+    D.process(overwrite=overwrite)
+  File "<ipython-input-5-72e411b66f20>", line 236, in process
+    self.dcmseries_to_sitk(
+  File "<ipython-input-5-72e411b66f20>", line 226, in dcmseries_to_sitk
+    dcm_img = self.maybe_load_dcm(nms)
+  File "<ipython-input-5-72e411b66f20>", line 204, in maybe_load_dcm
+    img = self.reader.Execute()
+  File "/home/ub/.local/lib/python3.10/site-packages/SimpleITK/SimpleITK.py", line 8276, in Execute
+    return _SimpleITK.ImageSeriesReader_Execute(self)
+RuntimeError: Exception thrown in SimpleITK ImageSeriesReader_Execute: /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx:351:
+ITK ERROR: ImageSeriesReader(0x5598767f4260): Size mismatch! The size of  /s/datasets_bkp/litq/dicom/49/DICOM/00003474/AA2B62C0/AAFB6E53/00009361/EED363E3 is [768, 512, 1] and does not
+ match the required size [512, 512, 1] from file /s/datasets_bkp/litq/dicom/49/DICOM/00003474/AA2B62C0/AAFB6E53/00009361/EE6AB70E
+"""
+
+The above exception was the direct cause of the following exception:
+
+RuntimeError                              Traceback (most recent call last)
+Cell In[7], line 1
+----> 1 D.process_all_cases(debug=False,overwrite=False)
+
+Cell In[5], line 144, in DCMDatasetToSITK.process_all_cases(self, sitk_ext, debug, overwrite)
+    141 def process_all_cases(self,sitk_ext='.nrrd',debug=False, overwrite=False):
+    143     args = [[row.case_folder,row.sitk_id,sitk_ext,overwrite] for i,row  in self.cases_summary.iterrows()]
+--> 144     res = multiprocess_multiarg(self.process_single_case,args,16,True,debug)
+
+File ~/code/fran/fran/utils/helpers.py:184, in multiprocess_multiarg(func, arguments, num_processes, multiprocess, debug, progress_bar)
+    182     pbar_fnc = get_pbar() if progress_bar==True else lambda x: x
+    183     for job in pbar_fnc(jobs):
+--> 184             results.append(job.get())
+    185 return results
+
+File ~/miniconda3/envs/dl2/lib/python3.10/multiprocessing/pool.py:774, in ApplyResult.get(self, timeout)
+    772     return self._value
+    773 else:
+--> 774     raise self._value
+
+RuntimeError: Exception thrown in SimpleITK ImageSeriesReader_Execute: /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx:351:
+ITK ERROR: ImageSeriesReader(0x5598767f4260): Size mismatch! The size of  /s/datasets_bkp/litq/dicom/49/DICOM/00003474/AA2B62C0/AAFB6E53/00009361/EED363E3 is [768, 512, 1] and does not
+ match the required size [512, 512, 1] from file /s/datasets_bkp/litq/dicom/49/DICOM/00003474/AA2B62C0/AAFB6E53/00009361/EE6AB70E
+
+In [8]:  File /s/datasets_bkp/litq/sitk/images/litq_00057_20191029.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/pt4/DICOM/000096E3/AACC7376/AA009EAD/00009354
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/pt4/DICOM/000096E3/AA9986FB/AAF34494/0000C5D9
+In [8]:  File /s/datasets_bkp/litq/sitk/images/litq_00053_20190824.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00059_20190812.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00052_20190729.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00066_20201006.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00064_20210528.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00056_20191107.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00051_20210601.nrrd exists. Skipping..
+Deleting /s/datasets_bkp/litq/dicom/85/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/82/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/82/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/82/README.TXT
+ File /s/datasets_bkp/litq/sitk/images/litq_00055_20191206.nrrd exists. Skipping..
+Deleting /s/datasets_bkp/litq/dicom/72/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/72/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/72/README.TXT
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00062_20210715.nrrd
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:1.18852
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00066_20190516.nrrd
+Deleting /s/datasets_bkp/litq/dicom/83/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/83/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/83/README.TXT
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:0.746457
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00065_20220429.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00058_20200117.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00063_20230314.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00054_20191230.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00056_20190220.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:1.19371
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00064_20210513.nrrd
+Deleting /s/datasets_bkp/litq/dicom/64/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/73/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/73/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/73/README.TXT
+Deleting /s/datasets_bkp/litq/dicom/64/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/64/README.TXT
+ File /s/datasets_bkp/litq/sitk/images/litq_00057_20181231.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00060_20190815.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00062_20210627.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00068_20230213.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00070_20220426.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00052_20190522.nrrd
+Deleting /s/datasets_bkp/litq/dicom/71/SECTRA
+Deleting /s/datasets_bkp/litq/dicom/71/DICOMDIR
+Deleting /s/datasets_bkp/litq/dicom/71/README.TXT
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00050_20190909.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00052_20190729.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00052_20190522.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:0.74504
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00061_20200206.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00069_20170224.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00072_20191118.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00058_20191010.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00070_20211129.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00065_20220621.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00060_20190613.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00071_20190729.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00073_20161019.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00054_20200323.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00057_20190131.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00068_20221117.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00075_20191010.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00074_20210306.nrrd
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:2.39106
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00069_20161221.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00059_20190520.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:1.1887
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00072_20200709.nrrd
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:1.18881
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00073_20161221.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00054_20191113.nrrd exists. Skipping..
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00075_20180925.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00074_20210623.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00057_20190723.nrrd exists. Skipping..
+WARNING: In /tmp/SimpleITK-build/ITK/Modules/IO/GDCM/src/itkGDCMSeriesFileNames.cxx, line 113
+GDCMSeriesFileNames (0x5598767f4260): No Series can be found, make sure your restrictions are not too strong
+
+ No dicom files in /s/datasets_bkp/litq/dicom/pt4/DICOM/000096E3/AA5373F7/AA3CA908/0000E41A
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkImageSeriesReader.hxx, line 477
+ImageSeriesReader (0x5598767f4260): Non uniform sampling or missing slices detected,  maximum nonuniformity:0.799094
+
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00061_20191025.nrrd
+Saving dicom series as /s/datasets_bkp/litq/sitk/images/litq_00071_20190522.nrrd
+ File /s/datasets_bkp/litq/sitk/images/litq_00054_20200616.nrrd exists. Skipping..
+ File /s/datasets_bkp/litq/sitk/images/litq_00059_20191007.nrrd exists. Skipping..
+

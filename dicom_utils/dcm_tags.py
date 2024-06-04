@@ -1,5 +1,5 @@
 import ipdb
-from helpers import *
+from dicom_utils.helpers import *
 tr = ipdb.set_trace
 
 no_change = lambda inpt:  inpt

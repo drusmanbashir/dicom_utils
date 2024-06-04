@@ -1,9 +1,8 @@
-from fran.inference.scoring import Path
-import itk
+from pathlib import Path
 import SimpleITK as sitk
-from dcm_to_sitk import *
+from dicom_utils.dcm_to_sitk import *
 import re
-from fran.utils.sitk_utils import align_sitk_imgs, create_sitk_as
+import pydicom_seg
 def folder_to_case_id(folder):
     name = folder.name
     pat = r".*\-(\d+)"
@@ -69,7 +68,7 @@ class ConvertDRLIToSITK():
     Masks are as specific segmentation dicom File   
     Each mask has lesions stored as sepoaraate islands requiring collation.
     '''
-    def __init__(self,dicom_folder:Path, output_folder, ext='nrrd'):
+    def __init__(self,dicom_folder:Path, output_folder, ext='nii.gz'):
         self.ext = "."+ext
         self.dataset_id = 'drli'
         self.case_folders = dicom_folder.glob("*")
@@ -92,7 +91,7 @@ if __name__ == "__main__":
     C.process(target_label = 2, overwrite=True)
 # %%
     dataset_id = 'drli'
-    ext = '.nrrd'
+    ext = '.nii.gz'
     overwrite=True
     output_img_folder = output_folder/("images")
     output_masks_folder = output_folder/("masks")
