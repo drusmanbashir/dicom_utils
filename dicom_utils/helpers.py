@@ -76,7 +76,18 @@ def kate_style(fldr):
 # %%
 
 if __name__ == "__main__":
-     
+    mask_fn ="/home/ub/Downloads/seg2.dcm"
+    hd = dcmread(mask_fn)
+    result = reader.read(mask_fn)
+
+    for segment_number in result.available_segments:
+        image_data = result.segment_data(segment_number)  # directly available
+        image = result.segment_image(segment_number)  # lazy construction
+        sitk.WriteImage(image, f'/tmp/seg-{segment_number}.nrrd', True)
+
+
+
+    dcm_segmentation(mask_fn) 
     fldr = Path("/s/datasets_bkp/crc_project/stagingarea/")
     kate_style(fldr)
 # %%

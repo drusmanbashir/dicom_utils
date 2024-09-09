@@ -395,10 +395,12 @@ if __name__ == "__main__":
         starting_ind=None,
     )
 # %%
+#SECTION:-------------------- TCIA-CRLM--------------------------------------------------------------------------------------
+# %%
 
     D = DCMDatasetToSITK(
-        dataset_name="react",
-        input_folder="/s/datasets_bkp/manifest-1680277513580/CT Lymph Nodes/ABD_LYMPH_001/09-14-2014-ABDLYMPH001-abdominallymphnodes-30274/",
+        dataset_name="tciacrlm",
+        input_folder="/home/ub/Downloads/dd/CRLM-CT-1009_CT_1",
         max_series_per_case=2,
         tags=["StudyDate"],
         starting_ind=None,
