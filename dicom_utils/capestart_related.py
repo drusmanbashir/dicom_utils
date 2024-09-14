@@ -2,7 +2,7 @@
 # %%
 import os
 from monai.transforms.io.dictionary import SaveImaged
-from fran.data.dataloader import dict_list_collated
+from fran.data.collate import dict_list_collated
 from pathlib import Path
 import shutil
 from fastcore.basics import chunked
