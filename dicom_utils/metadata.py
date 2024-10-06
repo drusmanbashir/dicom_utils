@@ -5,10 +5,7 @@ import ipdb
 tr = ipdb.set_trace
 import os
 
-from matplotlib import shutil
-from pydicom.fileset import FileSet
 from pydicom import dcmread
-from pydicom.filereader import read_dicomdir
 from pathlib import Path
 
 from dicom_utils.helpers import delete_unwanted_files_folders
