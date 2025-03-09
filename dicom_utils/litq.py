@@ -4,7 +4,6 @@
 import re
 import itertools as il
 
-from fastai.data.core import test_close, test_eq
 from dcm_to_sitk import *
 import pandas as pd
 def int_from_string(s):

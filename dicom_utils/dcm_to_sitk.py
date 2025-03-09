@@ -18,10 +18,10 @@ from fastcore.basics import Union, store_attr
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
-from fran.utils.fileio import maybe_makedirs, save_sitk, str_to_path
-from fran.utils.helpers import ask_proceed, multiprocess_multiarg
-from fran.utils.imageviewers import ImageMaskViewer, view_sitk
-from fran.utils.string import int_to_str
+from utilz.fileio import maybe_makedirs, save_sitk, str_to_path
+from utilz.helpers import ask_proceed, multiprocess_multiarg
+from utilz.imageviewers import ImageMaskViewer, view_sitk
+from utilz.string import int_to_str
 
 tr = ipdb.set_trace
 

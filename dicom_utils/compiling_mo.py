@@ -1,7 +1,7 @@
 
 # %%
 from litq import *
-from fran.utils.sitk_utils import get_metadata
+from utilz.sitk_utils import get_metadata
 
 # %%
 

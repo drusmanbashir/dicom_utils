@@ -4,7 +4,7 @@ import os
 
 from dicom_utils.dcm_to_sitk import delete_unwanted_files_folders
 from dicom_utils.metadata import dcm_id_fromfoldername
-from fran.utils.helpers import multiprocess_multiarg, pp
+from utilz.helpers import multiprocess_multiarg, pp
 
 
 if __name__ == "__main__":

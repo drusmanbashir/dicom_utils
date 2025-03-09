@@ -8,7 +8,7 @@ import numpy as np
 from pathlib import Path
 import datetime
 
-from xnat.helpers import maybe_makedirs
+from utilz.fileio import maybe_makedirs
 import os
 def nifti_rgb_to_dicom_series(
     nifti_path,
