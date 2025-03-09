@@ -31,7 +31,7 @@ _exclude = {
 
 
 def int_from_string(s):
-    a = re.search(r"\d+", s)
+    a = re.search("\d+", s)
     b = int(a.group())
     return b
 
