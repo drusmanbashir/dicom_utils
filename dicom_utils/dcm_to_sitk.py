@@ -268,6 +268,8 @@ class DCMCaseToSITK:
         if not case_id:
             case_id = case_folder.name
         store_attr()
+        if not self.output_folder.exists():
+            os.makedirs(self.output_folder)
 
     def sitk_name_from_series(self, header):
         suffixes = [translate_tag(header, x) for x in self.tags] if self.tags else []
@@ -309,6 +311,8 @@ class DCMCaseToSITK:
                 logging.info(" File {} exists. Skipping..".format(output_name))
         else:
             logging.warning(" No dicom files in {}".format(series_folder))
+            output_name = None
+        return output_name
 
     def process(self, overwrite=False):
         series_folders = self.exclude_unsuitable()
@@ -328,13 +332,16 @@ class DCMCaseToSITK:
             self.process_all_series(series_folders, overwrite)
 
     def process_all_series(self, series_folders, overwrite):
+        self.output_names=[]
         for folder in series_folders:
             print("Processing folder {}".format(folder))
-            self.dcmseries_to_sitk(
+            output_name = self.dcmseries_to_sitk(
                 series_folder=folder,
                 overwrite=overwrite,
             )
             print(".. Done.".format(folder))
+            self.output_names.append(output_name)
+        print("Check attribute output_names for filenames.")
 
     def exclude_unsuitable(self):
         """
