@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
+import os
 
+with open(os.path.join(os.path.dirname(__file__), "requirements.txt"), encoding="utf-8") as f:
+    requirements = f.read().splitlines()
 setup(
     name="dicom_utils",  # Package name as it will be installed.
     version="0.1.0",     # Initial version.
@@ -16,4 +19,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.9",
+    install_requires=requirements,
 )
