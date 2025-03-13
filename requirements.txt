@@ -7,6 +7,6 @@
 # pydicom_seg
 # setuptools>=75.1.0
 # SimpleITK>=2.4.1
+utilz @ git+https://github.com/drusmanbashir/utilz.git@main
 pydicom==2.4.4
 pydicom_seg==0.4.1
-utilz @ git+https://github.com/drusmanbashir/utilz.git@main
