@@ -15,4 +15,5 @@ dicom_utils/snippets.py
 dicom_utils.egg-info/PKG-INFO
 dicom_utils.egg-info/SOURCES.txt
 dicom_utils.egg-info/dependency_links.txt
+dicom_utils.egg-info/requires.txt
 dicom_utils.egg-info/top_level.txt

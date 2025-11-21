@@ -31,6 +31,7 @@ if __name__ == "__main__":
 # %%
     debug=False
     args = [[case] for case in files_from_17]
+    args = [[case] for case in cases]
     multiprocess_multiarg(dcm_id_fromfoldername,args,debug=debug)
 
 # %%

@@ -1,0 +1,3 @@
+utilz@ git+https://github.com/drusmanbashir/utilz.git@main
+pydicom>=2.4.4
+pydicom_seg>=0.4.1
