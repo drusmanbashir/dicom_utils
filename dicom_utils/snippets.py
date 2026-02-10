@@ -10,7 +10,7 @@ from utilz.helpers import multiprocess_multiarg, pp
 if __name__ == "__main__":
     
 
-    fldrs = Path("/s/datasets_bkp/manifest-4lZjKqlp5793425118292424834/TCGA-LIHC")
+    fldrs = Path("/home/ub/Desktop/drive-download-20260206T145400Z-1-001")
 
     delete_unwanted_files_folders(fldrs)
 # %%
@@ -29,6 +29,8 @@ if __name__ == "__main__":
     print("Files to change patient_id based on folder {0}".format(str(len(files_from_17))))
     pp(files_from_17)
 # %%
+# %%
+#SECTION:-------------------- DICOM ID FROM FOLDER NAME--------------------------------------------------------------------------------------
     debug=False
     args = [[case] for case in files_from_17]
     args = [[case] for case in cases]
