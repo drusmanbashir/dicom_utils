@@ -1,3 +1,14 @@
-utilz@ git+https://github.com/drusmanbashir/utilz.git@main
-pydicom>=2.4.4
-pydicom_seg>=0.4.1
+fastcore>=1.7.29
+ipdb>=0.13.13
+numpy<3,>=1.23
+pandas>=1.5
+pydicom<4,>=2.4
+pydicom-seg>=0.4.1
+SimpleITK>=2.3
+utilz @ git+https://github.com/drusmanbashir/utilz.git@main
+
+[full]
+dicom_utils[viz]
+
+[viz]
+matplotlib>=3.7

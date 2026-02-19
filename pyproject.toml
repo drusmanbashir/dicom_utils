@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dicom_utils"
+version = "0.1.0"
+description = "Utilities for DICOM, SEG, and SimpleITK conversion workflows."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Usman Bashir" }]
+license = { text = "MIT" }
+
+dependencies = [
+  "fastcore>=1.7.29",
+  "ipdb>=0.13.13",
+  "numpy>=1.23,<3",
+  "pandas>=1.5",
+  "pydicom>=2.4,<4",
+  "pydicom-seg>=0.4.1",
+  "SimpleITK>=2.3",
+  "utilz @ git+https://github.com/drusmanbashir/utilz.git@main",
+]
+
+[project.optional-dependencies]
+viz = [
+  "matplotlib>=3.7",
+]
+full = [
+  "dicom_utils[viz]",
+]
+
+[tool.setuptools.packages.find]
+include = ["dicom_utils*"]

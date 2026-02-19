@@ -1,12 +1,9 @@
-# fastcore
-# ipdb>=0.13.13
-# matplotlib
-# numpy
-# pandas>=2.2.3
-# pydicom
-# pydicom_seg
-# setuptools>=75.1.0
-# SimpleITK>=2.4.1
+fastcore>=1.7.29
+ipdb>=0.13.13
+matplotlib>=3.7
+numpy>=1.23,<3
+pandas>=1.5
+pydicom>=2.4,<4
+pydicom-seg>=0.4.1
+SimpleITK>=2.3
 utilz @ git+https://github.com/drusmanbashir/utilz.git@main
-pydicom==2.4.4
-pydicom_seg>=0.4.1
