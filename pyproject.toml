@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dicom_utils"
+version = "0.1.0"
+description = "A package for handling DICOM files and utilities."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Usman Bashir", email = "your.email@example.com" }]
+license = { text = "MIT" }
+dependencies = [
+  "utilz @ git+https://github.com/drusmanbashir/utilz.git@main",
+  "pydicom>=2.4.4,<4.0.0",
+  "pydicom-seg @ git+https://github.com/drusmanbashir/pydicom-seg.git@numpy2-pydicom3-compat",
+]
+
+[tool.setuptools.packages.find]
+include = ["dicom_utils*"]
