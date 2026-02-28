@@ -42,7 +42,7 @@ def dcm_segmentation(mask_fn):
 
 
 
-from utilz.string import int_to_str
+from utilz.stringz import int_to_str
 
 def delete_unwanted_files_folders(
         parent, delete_these=["SECTRA",  "README", "ComponentUpdate", "Viewer","DICOMDIR"]

@@ -21,7 +21,7 @@ from pydicom import dcmread
 from utilz.fileio import maybe_makedirs, save_sitk, str_to_path
 from utilz.helpers import ask_proceed, multiprocess_multiarg
 from utilz.imageviewers import ImageMaskViewer, view_sitk
-from utilz.string import int_to_str
+from utilz.stringz import int_to_str
 
 tr = ipdb.set_trace
 

@@ -2,22 +2,10 @@ Metadata-Version: 2.4
 Name: dicom_utils
 Version: 0.1.0
 Summary: A package for handling DICOM files and utilities.
-Home-page: https://github.com/yourusername/dicom_utils
-Author: Usman Bashir
-Author-email: your.email@example.com
-Classifier: Programming Language :: Python :: 3
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
+Author-email: Usman Bashir <your.email@example.com>
+License: MIT
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
-Requires-Dist: utilz@ git+https://github.com/drusmanbashir/utilz.git@main
-Requires-Dist: pydicom>=2.4.4
-Requires-Dist: pydicom_seg>=0.4.1
-Dynamic: author
-Dynamic: author-email
-Dynamic: classifier
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
+Requires-Dist: utilz @ git+https://github.com/drusmanbashir/utilz.git@main
+Requires-Dist: pydicom<4.0.0,>=2.4.4
+Requires-Dist: pydicom-seg @ git+https://github.com/drusmanbashir/pydicom-seg.git@numpy2-pydicom3-compat

@@ -1,3 +1,3 @@
-utilz@ git+https://github.com/drusmanbashir/utilz.git@main
-pydicom>=2.4.4
-pydicom_seg>=0.4.1
+utilz @ git+https://github.com/drusmanbashir/utilz.git@main
+pydicom<4.0.0,>=2.4.4
+pydicom-seg @ git+https://github.com/drusmanbashir/pydicom-seg.git@numpy2-pydicom3-compat

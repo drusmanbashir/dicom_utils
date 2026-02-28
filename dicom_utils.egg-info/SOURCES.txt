@@ -1,7 +1,7 @@
 README.md
+pyproject.toml
 setup.py
 dicom_utils/__init__.py
-dicom_utils/compiling_mo.py
 dicom_utils/dbase.py
 dicom_utils/dcm_tags.py
 dicom_utils/dcm_to_sitk.py

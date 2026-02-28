@@ -21,7 +21,7 @@ from pydicom import dcmread
 from utilz.fileio import maybe_makedirs, save_sitk, str_to_path
 from utilz.helpers import ask_proceed, multiprocess_multiarg
 from utilz.imageviewers import ImageMaskViewer, view_sitk
-from utilz.string import int_to_str
+from utilz.stringz import int_to_str
 
 tr = ipdb.set_trace
 
@@ -92,6 +92,8 @@ class DCMDatasetToSITK:
         max_series_per_case=3,
         min_files_per_series=50,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
     ):
         """
         if starting_ind=None, no names are generated. Instead folder names are used as unique ids
@@ -219,6 +221,8 @@ class DCMDatasetToSITK:
             max_series_per_case=self.max_series_per_case,
             min_files_per_series=self.min_files_per_series,
             sitk_ext=".nii.gz",
+            include_modalities=self.include_modalities,
+            exclude_image_type_values=self.exclude_image_type_values,
         )
         D.process(overwrite=overwrite)
 
@@ -257,6 +261,8 @@ class DCMCaseToSITK:
         max_series_per_case=2,
         min_files_per_series=1,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
     ):
         """
         converts a single folder with DICOM  files into sitk files. One sitk per DCM series
@@ -268,6 +274,9 @@ class DCMCaseToSITK:
         if not case_id:
             case_id = case_folder.name
         store_attr()
+        # Preserve old behavior unless caller opts out.
+        if self.exclude_image_type_values is None:
+            self.exclude_image_type_values = list(_exclude.values())
         if not self.output_folder.exists():
             os.makedirs(self.output_folder)
 
@@ -364,10 +373,18 @@ class DCMCaseToSITK:
         """
         fns = list(dcm_fldr.glob("*"))
         he = dcmread(fns[0])
-        for tag, val in _exclude.items():
-            t = str(he.get_item(tag))
-            if val in t:
+        if self.include_modalities:
+            keep_mods = {str(m).upper() for m in self.include_modalities}
+            modality = str(getattr(he, "Modality", "")).upper()
+            if modality not in keep_mods:
                 return True
+
+        if self.exclude_image_type_values:
+            image_type = [str(x).upper() for x in getattr(he, "ImageType", [])]
+            for val in self.exclude_image_type_values:
+                val_up = str(val).upper()
+                if any(val_up in im for im in image_type):
+                    return True
         return False
 
 
