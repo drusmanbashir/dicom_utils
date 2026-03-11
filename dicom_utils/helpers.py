@@ -6,7 +6,6 @@ from pathlib import Path
 import SimpleITK as sitk
 import re
 from pydicom import dcmread
-import pydicom_seg
 def folder_to_case_id(folder):
     name = folder.name
     pat = r".*\-(\d+)"
@@ -34,6 +33,8 @@ def get_diff_z(img,mask,tol=1e-3 ):
     return int(func(diff_z))
 
 def dcm_segmentation(mask_fn):
+    import pydicom_seg
+
     dcm_seg = dcmread(mask_fn)
     reader = pydicom_seg.MultiClassReader()
     result = reader.read(dcm_seg)
