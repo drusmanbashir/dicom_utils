@@ -14,7 +14,7 @@ import pandas as pd
 import pydicom
 import SimpleITK as sitk
 from dicom_utils.dcm_tags import translate_tag
-from fastcore.basics import Union, store_attr
+from fastcore.basics import Union
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
@@ -98,7 +98,16 @@ class DCMDatasetToSITK:
         """
         if starting_ind=None, no names are generated. Instead folder names are used as unique ids
         """
-        store_attr()
+        self.dataset_name = dataset_name
+        self.input_folder = input_folder
+        self.output_folder = output_folder
+        self.starting_ind = starting_ind
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
         self.rename_sitk = True if isinstance(starting_ind, int) else False
         self.cases = [case for case in self.input_folder.glob("*") if case.is_dir()]
         self.colnames = ["case_folder", "sitk_id"]
@@ -273,7 +282,16 @@ class DCMCaseToSITK:
         case_folder, output_folder = [Path(f) for f in [case_folder, output_folder]]
         if not case_id:
             case_id = case_folder.name
-        store_attr()
+        self.dataset_name = dataset_name
+        self.case_folder = case_folder
+        self.output_folder = output_folder
+        self.case_id = case_id
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
         # Preserve old behavior unless caller opts out.
         if self.exclude_image_type_values is None:
             self.exclude_image_type_values = list(_exclude.values())
