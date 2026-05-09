@@ -45,19 +45,6 @@ def dcm_segmentation(mask_fn):
 
 from utilz.stringz import int_to_str
 
-def delete_unwanted_files_folders(
-        parent, delete_these=["SECTRA",  "README", "ComponentUpdate", "Viewer","DICOMDIR"]
-    ):
-        dd = list(parent.rglob("*"))
-        for dirr in dd:
-            if dirr.exists():
-                if any((match := substring) in str(dirr) for substring in delete_these):
-                    print("Deleting {}".format(dirr))
-                    if dirr.is_file() == True:
-                        dirr.unlink()
-                    else:
-                        shutil.rmtree(dirr)
-
 def process_attr(func):
     def _inner(obj,val):
         res = getattr(obj,val)
