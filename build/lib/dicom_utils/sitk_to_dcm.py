@@ -183,7 +183,7 @@ def nifti_rgb_to_dicom_series(
 
 # %%
 if __name__ == "__main__":
-    nifti_path = Path("/s/fran_storage/predictions/litsmc/LITS-933/4.nii.gz")
+    nifti_path = Path("/t/fran_storage/predictions/litsmc/LITS-933/4.nii.gz")
     dcm_folder = Path("/home/ub/Desktop/10_CT_1/4/DICOM")
     output_folder = Path("/home/ub/Desktop/10_CT_1/4/SEG")
     maybe_makedirs (output_folder)
