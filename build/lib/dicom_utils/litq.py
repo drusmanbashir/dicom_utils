@@ -4,10 +4,10 @@
 import re
 import itertools as il
 
-from dcm_to_sitk import *
+from .dcm_to_sitk import *
 import pandas as pd
 def int_from_string(s):
-        a=re.search('\d+',s)
+        a=re.search(r'\d+',s)
         b = int(a.group())
         return b
 

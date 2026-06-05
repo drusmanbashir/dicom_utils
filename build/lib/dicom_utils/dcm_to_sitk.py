@@ -14,7 +14,7 @@ import pandas as pd
 import pydicom
 import SimpleITK as sitk
 from dicom_utils.dcm_tags import translate_tag
-from fastcore.basics import Union, store_attr
+from fastcore.basics import Union
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
@@ -31,7 +31,7 @@ _exclude = {
 
 
 def int_from_string(s):
-    a = re.search("\d+", s)
+    a = re.search(r"\d+", s)
     b = int(a.group())
     return b
 
@@ -92,11 +92,22 @@ class DCMDatasetToSITK:
         max_series_per_case=3,
         min_files_per_series=50,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
     ):
         """
         if starting_ind=None, no names are generated. Instead folder names are used as unique ids
         """
-        store_attr()
+        self.dataset_name = dataset_name
+        self.input_folder = input_folder
+        self.output_folder = output_folder
+        self.starting_ind = starting_ind
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
         self.rename_sitk = True if isinstance(starting_ind, int) else False
         self.cases = [case for case in self.input_folder.glob("*") if case.is_dir()]
         self.colnames = ["case_folder", "sitk_id"]
@@ -219,6 +230,8 @@ class DCMDatasetToSITK:
             max_series_per_case=self.max_series_per_case,
             min_files_per_series=self.min_files_per_series,
             sitk_ext=".nii.gz",
+            include_modalities=self.include_modalities,
+            exclude_image_type_values=self.exclude_image_type_values,
         )
         D.process(overwrite=overwrite)
 
@@ -257,6 +270,8 @@ class DCMCaseToSITK:
         max_series_per_case=2,
         min_files_per_series=1,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
     ):
         """
         converts a single folder with DICOM  files into sitk files. One sitk per DCM series
@@ -267,7 +282,19 @@ class DCMCaseToSITK:
         case_folder, output_folder = [Path(f) for f in [case_folder, output_folder]]
         if not case_id:
             case_id = case_folder.name
-        store_attr()
+        self.dataset_name = dataset_name
+        self.case_folder = case_folder
+        self.output_folder = output_folder
+        self.case_id = case_id
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
+        # Preserve old behavior unless caller opts out.
+        if self.exclude_image_type_values is None:
+            self.exclude_image_type_values = list(_exclude.values())
         if not self.output_folder.exists():
             os.makedirs(self.output_folder)
 
@@ -364,10 +391,18 @@ class DCMCaseToSITK:
         """
         fns = list(dcm_fldr.glob("*"))
         he = dcmread(fns[0])
-        for tag, val in _exclude.items():
-            t = str(he.get_item(tag))
-            if val in t:
+        if self.include_modalities:
+            keep_mods = {str(m).upper() for m in self.include_modalities}
+            modality = str(getattr(he, "Modality", "")).upper()
+            if modality not in keep_mods:
                 return True
+
+        if self.exclude_image_type_values:
+            image_type = [str(x).upper() for x in getattr(he, "ImageType", [])]
+            for val in self.exclude_image_type_values:
+                val_up = str(val).upper()
+                if any(val_up in im for im in image_type):
+                    return True
         return False
 
 

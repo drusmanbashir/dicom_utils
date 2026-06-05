@@ -53,6 +53,7 @@ if __name__ == "__main__":
     
 
     fldrs = Path("/s/xnat_shadow/crc/staging")
+    fldrs = Path("/media/UB/datasets/litq/dicom")
 
     delete_unwanted_files_folders(fldrs)
 # %%
