@@ -10,7 +10,7 @@ from utilz.helpers import multiprocess_multiarg, pp
 if __name__ == "__main__":
     
 
-    fldrs = Path("/home/ub/Desktop/drive-download-20260206T145400Z-1-001")
+    fldrs = Path("/s/insync/datasets/2ww")
 
     delete_unwanted_files_folders(fldrs)
 # %%

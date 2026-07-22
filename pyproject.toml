@@ -17,7 +17,7 @@ dependencies = [
   "numpy>=1.23,<3",
   "pandas>=1.5",
   "pydicom>=2.4,<4",
-  "pydicom-seg>=0.4.1",
+  "pydicom-seg @ git+https://github.com/drusmanbashir/pydicom-seg.git@numpy2-pydicom3-compat",
   "SimpleITK>=2.3",
   "utilz @ git+https://github.com/drusmanbashir/utilz.git@main",
 ]

@@ -6,7 +6,6 @@ from pathlib import Path
 import SimpleITK as sitk
 import re
 from pydicom import dcmread
-import pydicom_seg
 def folder_to_case_id(folder):
     name = folder.name
     pat = r".*\-(\d+)"
@@ -34,6 +33,8 @@ def get_diff_z(img,mask,tol=1e-3 ):
     return int(func(diff_z))
 
 def dcm_segmentation(mask_fn):
+    import pydicom_seg
+
     dcm_seg = dcmread(mask_fn)
     reader = pydicom_seg.MultiClassReader()
     result = reader.read(dcm_seg)
@@ -42,20 +43,22 @@ def dcm_segmentation(mask_fn):
 
 
 
-from utilz.string import int_to_str
+from utilz.stringz import int_to_str
+
 
 def delete_unwanted_files_folders(
-        parent, delete_these=["SECTRA",  "README", "ComponentUpdate", "Viewer","DICOMDIR"]
-    ):
-        dd = list(parent.rglob("*"))
-        for dirr in dd:
-            if dirr.exists():
-                if any((match := substring) in str(dirr) for substring in delete_these):
-                    print("Deleting {}".format(dirr))
-                    if dirr.is_file() == True:
-                        dirr.unlink()
-                    else:
-                        shutil.rmtree(dirr)
+    parent,
+    delete_these=["SECTRA", "README", "ComponentUpdate", "Viewer", "DICOMDIR"],
+):
+    dd = list(parent.rglob("*"))
+    for dirr in dd:
+        if dirr.exists():
+            if any(substring in str(dirr) for substring in delete_these):
+                print("Deleting {}".format(dirr))
+                if dirr.is_file():
+                    dirr.unlink()
+                else:
+                    shutil.rmtree(dirr)
 
 def process_attr(func):
     def _inner(obj,val):

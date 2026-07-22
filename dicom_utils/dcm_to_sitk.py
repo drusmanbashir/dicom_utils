@@ -14,14 +14,14 @@ import pandas as pd
 import pydicom
 import SimpleITK as sitk
 from dicom_utils.dcm_tags import translate_tag
-from fastcore.basics import Union, store_attr
+from fastcore.basics import Union
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
 from utilz.fileio import maybe_makedirs, save_sitk, str_to_path
 from utilz.helpers import ask_proceed, multiprocess_multiarg
 from utilz.imageviewers import ImageMaskViewer, view_sitk
-from utilz.string import int_to_str
+from utilz.stringz import int_to_str
 
 tr = ipdb.set_trace
 
@@ -75,6 +75,83 @@ def non_empty_subfolders(folder, min_files=1):
     return folders
 
 
+def _series_header(dcm_fldr: Path):
+    fns = [p for p in dcm_fldr.iterdir() if p.is_file()]
+    return dcmread(fns[0])
+
+
+def _is_axial(he) -> bool:
+    desc = str(getattr(he, "SeriesDescription", "")).lower()
+    if re.search(r"\bcor\b", desc) or " cor" in desc:
+        return False
+    if re.search(r"\bsag\b", desc) or " sag" in desc:
+        return False
+    iop = getattr(he, "ImageOrientationPatient", None)
+    if iop is None or len(iop) < 6:
+        return True
+    row = np.array([float(iop[0]), float(iop[1]), float(iop[2])])
+    col = np.array([float(iop[3]), float(iop[4]), float(iop[5])])
+    normal = np.cross(row, col)
+    nnorm = float(np.linalg.norm(normal))
+    if nnorm == 0:
+        return True
+    normal = normal / nnorm
+    return abs(normal[2]) > 0.8
+
+
+def _slice_thickness_mm(he) -> float:
+    return float(getattr(he, "SliceThickness", 999))
+
+
+def pick_axial_series_folder(folders: list) -> Path | None:
+    axial = [f for f in folders if _is_axial(_series_header(f))]
+    if not axial:
+        return None
+    in_band = [
+        (f, _slice_thickness_mm(_series_header(f)))
+        for f in axial
+        if 1.0 <= _slice_thickness_mm(_series_header(f)) <= 1.5
+    ]
+    if in_band:
+        in_band.sort(key=lambda x: x[1])
+        return in_band[0][0]
+    return max(axial, key=lambda f: _slice_thickness_mm(_series_header(f)))
+
+
+def select_series_folders_by_study(folders, study_date=None, case_folder=None):
+    from collections import defaultdict
+
+    by_date = defaultdict(list)
+    for fldr in folders:
+        he = _series_header(fldr)
+        by_date[str(getattr(he, "StudyDate", ""))].append(fldr)
+    dates = sorted(by_date.keys())
+    if study_date:
+        dates = [study_date] if study_date in by_date else []
+    selected = []
+    for sd in dates:
+        pick = pick_axial_series_folder(by_date[sd])
+        if pick is None:
+            series_info = [
+                (
+                    str(getattr(_series_header(f), "SeriesDescription", "")),
+                    _slice_thickness_mm(_series_header(f)),
+                )
+                for f in by_date[sd]
+            ]
+            logging.error(
+                "No axial series case_folder=%s study_date=%s candidates=%s",
+                case_folder,
+                sd,
+                series_info,
+            )
+            raise ValueError(
+                f"No axial CT series for case_folder {case_folder} study_date {sd}"
+            )
+        selected.append(pick)
+    return selected
+
+
 class DCMDatasetToSITK:
     """
     wrapper class processes all dicom cases inside a folder into sitk files. Maintains records in a csv file. If cases already present, it skips (unless overwrite)
@@ -92,11 +169,22 @@ class DCMDatasetToSITK:
         max_series_per_case=3,
         min_files_per_series=50,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
     ):
         """
         if starting_ind=None, no names are generated. Instead folder names are used as unique ids
         """
-        store_attr()
+        self.dataset_name = dataset_name
+        self.input_folder = input_folder
+        self.output_folder = output_folder
+        self.starting_ind = starting_ind
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
         self.rename_sitk = True if isinstance(starting_ind, int) else False
         self.cases = [case for case in self.input_folder.glob("*") if case.is_dir()]
         self.colnames = ["case_folder", "sitk_id"]
@@ -219,6 +307,8 @@ class DCMDatasetToSITK:
             max_series_per_case=self.max_series_per_case,
             min_files_per_series=self.min_files_per_series,
             sitk_ext=".nii.gz",
+            include_modalities=self.include_modalities,
+            exclude_image_type_values=self.exclude_image_type_values,
         )
         D.process(overwrite=overwrite)
 
@@ -257,6 +347,9 @@ class DCMCaseToSITK:
         max_series_per_case=2,
         min_files_per_series=1,
         sitk_ext=".nii.gz",
+        include_modalities: Union[None, list] = None,
+        exclude_image_type_values: Union[None, list] = None,
+        study_date: Union[None, str] = None,
     ):
         """
         converts a single folder with DICOM  files into sitk files. One sitk per DCM series
@@ -267,7 +360,20 @@ class DCMCaseToSITK:
         case_folder, output_folder = [Path(f) for f in [case_folder, output_folder]]
         if not case_id:
             case_id = case_folder.name
-        store_attr()
+        self.dataset_name = dataset_name
+        self.case_folder = case_folder
+        self.output_folder = output_folder
+        self.case_id = case_id
+        self.tags = tags
+        self.max_series_per_case = max_series_per_case
+        self.min_files_per_series = min_files_per_series
+        self.sitk_ext = sitk_ext
+        self.include_modalities = include_modalities
+        self.exclude_image_type_values = exclude_image_type_values
+        self.study_date = study_date
+        # Preserve old behavior unless caller opts out.
+        if self.exclude_image_type_values is None:
+            self.exclude_image_type_values = list(_exclude.values())
         if not self.output_folder.exists():
             os.makedirs(self.output_folder)
 
@@ -315,7 +421,12 @@ class DCMCaseToSITK:
         return output_name
 
     def process(self, overwrite=False):
-        series_folders = self.exclude_unsuitable()
+        candidate_folders = self.exclude_unsuitable()
+        series_folders = select_series_folders_by_study(
+            candidate_folders,
+            study_date=self.study_date,
+            case_folder=self.case_folder,
+        )
         num_seris = len(series_folders)
         logging.info(
             "Number of series in case_folder {0} is {1}".format(
@@ -364,10 +475,18 @@ class DCMCaseToSITK:
         """
         fns = list(dcm_fldr.glob("*"))
         he = dcmread(fns[0])
-        for tag, val in _exclude.items():
-            t = str(he.get_item(tag))
-            if val in t:
+        if self.include_modalities:
+            keep_mods = {str(m).upper() for m in self.include_modalities}
+            modality = str(getattr(he, "Modality", "")).upper()
+            if modality not in keep_mods:
                 return True
+
+        if self.exclude_image_type_values:
+            image_type = [str(x).upper() for x in getattr(he, "ImageType", [])]
+            for val in self.exclude_image_type_values:
+                val_up = str(val).upper()
+                if any(val_up in im for im in image_type):
+                    return True
         return False
 
 
