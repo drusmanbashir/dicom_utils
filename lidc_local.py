@@ -3,9 +3,10 @@ import os
 
 import multiprocessing as mp
 import pylidc as pl
-from utilz.fileio import maybe_makedirs
 
 from lidc import LIDCXNATProcessor
+from utilz.fileio import maybe_makedirs
+
 
 
 def _default_worker_count(target_utilization=0.70):

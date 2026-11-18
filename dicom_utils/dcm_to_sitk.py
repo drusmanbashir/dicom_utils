@@ -1,4 +1,6 @@
 # %%
+"""Convert DICOM case folders into SimpleITK images, one file per selected axial series per study.
+DCMDatasetToSITK tracks cases in a cases_summary.csv; DCMCaseToSITK converts a single case."""
 import itertools as il
 import logging
 import math
@@ -18,10 +20,12 @@ from fastcore.basics import Union
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
-from utilz.fileio import maybe_makedirs, save_sitk, str_to_path
 from utilz.helpers import ask_proceed, multiprocess_multiarg
 from utilz.imageviewers import ImageMaskViewer, view_sitk
 from utilz.stringz import int_to_str
+from utilz.stringz import str_to_path
+from utilz.fileio import maybe_makedirs, save_sitk
+
 
 tr = ipdb.set_trace
 
@@ -31,6 +35,7 @@ _exclude = {
 
 
 def int_from_string(s):
+    """First run of digits in s as an int, e.g. 'litq_00012' -> 12."""
     a = re.search(r"\d+", s)
     b = int(a.group())
     return b
@@ -40,7 +45,11 @@ str_to_path(0)
 
 
 def non_empty_subfolders(folder, min_files=1):
-    fldrs = list(folder.rglob("*"))
+    """Folders below folder (not folder itself) that directly hold files.
+
+    min_files: folders with fewer entries are skipped and logged.
+    """
+    fldrs =list(folder.rglob("*"))
     ser_f = [fldr.parent for fldr in fldrs if fldr.is_file()]
     ser_f = set(ser_f)
     ser_f = ser_f.difference([folder])
@@ -76,12 +85,17 @@ def non_empty_subfolders(folder, min_files=1):
 
 
 def _series_header(dcm_fldr: Path):
-    fns = [p for p in dcm_fldr.iterdir() if p.is_file()]
+    """Header of the first file in dcm_fldr (iterdir order, unsorted)."""
+    fns =[p for p in dcm_fldr.iterdir() if p.is_file()]
     return dcmread(fns[0])
 
 
 def _is_axial(he) -> bool:
-    desc = str(getattr(he, "SeriesDescription", "")).lower()
+    """False if SeriesDescription names cor/sag or the IOP slice normal has |z| <= 0.8.
+
+    Missing or degenerate ImageOrientationPatient counts as axial.
+    """
+    desc =str(getattr(he, "SeriesDescription", "")).lower()
     if re.search(r"\bcor\b", desc) or " cor" in desc:
         return False
     if re.search(r"\bsag\b", desc) or " sag" in desc:
@@ -100,11 +114,16 @@ def _is_axial(he) -> bool:
 
 
 def _slice_thickness_mm(he) -> float:
+    """SliceThickness in mm; 999 when the tag is missing."""
     return float(getattr(he, "SliceThickness", 999))
 
 
 def pick_axial_series_folder(folders: list) -> Path | None:
-    axial = [f for f in folders if _is_axial(_series_header(f))]
+    """Thinnest axial series with 1.0-1.5 mm slices, else the thickest axial series.
+
+    Returns None when no folder is axial.
+    """
+    axial =[f for f in folders if _is_axial(_series_header(f))]
     if not axial:
         return None
     in_band = [

@@ -8,6 +8,8 @@ from pathlib import Path
 import ipdb
 import numpy as np
 import SimpleITK as sitk
+from utilz.fileio import maybe_makedirs
+
 
 
 def _apply_runtime_compat():
@@ -25,7 +27,6 @@ _apply_runtime_compat()
 
 import pylidc as pl
 from pylidc.utils import consensus
-from utilz.fileio import maybe_makedirs
 from xnat.object_oriented import Proj
 
 

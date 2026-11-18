@@ -1,4 +1,6 @@
 # %%
+"""Write SimpleITK / NIfTI volumes out as DICOM series.
+RGB overlays reuse geometry tags from a reference DICOM folder."""
 import SimpleITK as sitk
 import pydicom
 from pydicom.dataset import FileDataset, FileMetaDataset
@@ -8,8 +10,11 @@ import numpy as np
 from pathlib import Path
 import datetime
 
-from utilz.fileio import maybe_makedirs
 import os
+from utilz.fileio import maybe_makedirs
+
+
+
 def nifti_rgb_to_dicom_series(
     nifti_path,
     ref_dicom_dir,
@@ -19,17 +24,16 @@ def nifti_rgb_to_dicom_series(
     series_instance_uid=None,
     signed=True,
 ):
-    """
-    Convert a 4D NIfTI (nx, ny, nz, 3) to a DICOM series of 2D color images,
-    using essential metadata from a reference DICOM series.
 
-    :param nifti_path: Path to the input NIfTI file (last dim = 3 for RGB).
-    :param ref_dicom_dir: Directory containing the reference DICOM series.
-    :param output_dir: Output directory for the new DICOM files.
-    :param series_description: DICOM SeriesDescription for the new series.
-    :param study_instance_uid: (Optional) If provided, overrides the study UID.
-    :param series_instance_uid: (Optional) If provided, overrides the series UID.
+
+    """Write an RGB NIfTI (array (nz, ny, nx, 3)) as a 16-bit RGB DICOM series, one file per slice.
+
+    ref_dicom_dir: supplies patient, spacing and orientation tags.
+    study_instance_uid, series_instance_uid: currently ignored (always regenerated).
+    signed: int16 if True, else uint16.
     """
+
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -182,6 +186,7 @@ def nifti_rgb_to_dicom_series(
     print(f"Color DICOM series written to: {output_dir}")
 
 # %%
+#SECTION:-------------------- --------------------------------------------------------------------------------------
 if __name__ == "__main__":
     nifti_path = Path("/t/fran_storage/predictions/litsmc/LITS-933/4.nii.gz")
     dcm_folder = Path("/home/ub/Desktop/10_CT_1/4/DICOM")

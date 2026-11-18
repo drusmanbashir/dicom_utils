@@ -67,5 +67,4 @@ if __name__ == "__main__":
     dc[kernel]
     dc.SliceThickness
     print
-    dc[mod.value]
     fldrs = Path()

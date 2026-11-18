@@ -3,12 +3,14 @@ import SimpleITK as sitk
 from dicom_utils.dcm_to_sitk import *
 import re
 def folder_to_case_id(folder):
+    """Extract trailing numeric case id from a folder name like 'prefix-123'."""
     name = folder.name
     pat = r".*\-(\d+)"
     id = re.match(pat,name ,re.IGNORECASE)
     return id.groups(0)[0]
 
 def set_metadata_as(clean:sitk.Image, img:sitk.Image)->sitk.Image:
+    """Copy direction, origin, and spacing from img onto clean; return clean."""
     clean.SetDirection(img.GetDirection())
     clean.SetOrigin(img.GetOrigin())
     clean.SetSpacing(img.GetSpacing())
