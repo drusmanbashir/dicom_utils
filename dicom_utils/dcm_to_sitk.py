@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import ipdb
@@ -20,7 +21,7 @@ from fastcore.basics import Union
 from dicom_utils.helpers import delete_unwanted_files_folders
 from pydicom import dcmread
 
-from utilz.helpers import ask_proceed, multiprocess_multiarg
+from utilz.helpers import multiprocess_multiarg
 from utilz.imageviewers import ImageMaskViewer, view_sitk
 from utilz.stringz import int_to_str
 from utilz.stringz import str_to_path
@@ -85,9 +86,18 @@ def non_empty_subfolders(folder, min_files=1):
 
 
 def _series_header(dcm_fldr: Path):
-    """Header of the first file in dcm_fldr (iterdir order, unsorted)."""
-    fns =[p for p in dcm_fldr.iterdir() if p.is_file()]
-    return dcmread(fns[0])
+    """Read one header after verifying that the folder contains one series."""
+    files = sorted(p for p in dcm_fldr.iterdir() if p.is_file()
+                   and not any(x in p.name for x in ("SECTRA", "README", "ComponentUpdate", "Viewer", "DICOMDIR")))
+    if not files:
+        raise ValueError(f"No DICOM files in {dcm_fldr}")
+    header = dcmread(files[0], stop_before_pixels=True)
+    uid = str(header.SeriesInstanceUID)
+    for path in files[1:]:
+        other = dcmread(path, stop_before_pixels=True, specific_tags=["SeriesInstanceUID"])
+        if str(other.SeriesInstanceUID) != uid:
+            raise ValueError(f"Multiple SeriesInstanceUID values in {dcm_fldr}")
+    return header
 
 
 def _is_axial(he) -> bool:
@@ -96,9 +106,9 @@ def _is_axial(he) -> bool:
     Missing or degenerate ImageOrientationPatient counts as axial.
     """
     desc =str(getattr(he, "SeriesDescription", "")).lower()
-    if re.search(r"\bcor\b", desc) or " cor" in desc:
+    if re.search(r"\bcor\b", desc):
         return False
-    if re.search(r"\bsag\b", desc) or " sag" in desc:
+    if re.search(r"\bsag\b", desc):
         return False
     iop = getattr(he, "ImageOrientationPatient", None)
     if iop is None or len(iop) < 6:
@@ -115,17 +125,25 @@ def _is_axial(he) -> bool:
 
 def _slice_thickness_mm(he) -> float:
     """SliceThickness in mm; 999 when the tag is missing."""
-    return float(getattr(he, "SliceThickness", 999))
+    value = getattr(he, "SliceThickness", 999)
+    if value is None or str(value).strip() == "":
+        raise ValueError("Empty SliceThickness")
+    thickness = float(value)
+    if not math.isfinite(thickness) or thickness <= 0:
+        raise ValueError(f"Invalid SliceThickness: {value}")
+    return thickness
 
 
-def pick_axial_series_folder(folders: list, min_mm: float = 0.8) -> Path | None:
+def pick_axial_series_folder(folders: list, min_mm: float = 0.8, headers=None) -> Path | None:
     """One axial series per study; sagittal/coronal reformats never qualify.
 
     Any axial series thinner than min_mm: the thickest of those. Else the thinnest.
     Ties go to the series with more files. Missing SliceThickness counts as 999 mm.
     Returns None when no folder is axial.
     """
-    axial = [(f, _slice_thickness_mm(_series_header(f))) for f in folders if _is_axial(_series_header(f))]
+    if headers is None:
+        headers = {f: _series_header(f) for f in folders}
+    axial = [(f, _slice_thickness_mm(headers[f])) for f in folders if _is_axial(headers[f])]
     if not axial:
         return None
     nfiles = lambda f: sum(1 for p in f.iterdir() if p.is_file())
@@ -135,24 +153,26 @@ def pick_axial_series_folder(folders: list, min_mm: float = 0.8) -> Path | None:
     return min(axial, key=lambda a: (a[1], -nfiles(a[0])))[0]
 
 
-def select_series_folders_by_study(folders, study_date=None, case_folder=None):
+def select_series_folders_by_study(folders, study_date=None, case_folder=None, headers=None):
     from collections import defaultdict
 
+    if headers is None:
+        headers = {f: _series_header(f) for f in folders}
     by_date = defaultdict(list)
     for fldr in folders:
-        he = _series_header(fldr)
+        he = headers[fldr]
         by_date[str(getattr(he, "StudyDate", ""))].append(fldr)
     dates = sorted(by_date.keys())
     if study_date:
         dates = [study_date] if study_date in by_date else []
     selected = []
     for sd in dates:
-        pick = pick_axial_series_folder(by_date[sd])
+        pick = pick_axial_series_folder(by_date[sd], headers=headers)
         if pick is None:
             series_info = [
                 (
-                    str(getattr(_series_header(f), "SeriesDescription", "")),
-                    _slice_thickness_mm(_series_header(f)),
+                    str(getattr(headers[f], "SeriesDescription", "")),
+                    _slice_thickness_mm(headers[f]),
                 )
                 for f in by_date[sd]
             ]
@@ -208,23 +228,25 @@ class DCMDatasetToSITK:
         self.logfile = self.output_folder.parent / "log.txt"
         if not self.output_folder.exists():
             os.makedirs(self.output_folder)
-        if self.cases_summary_fn.exists():
+        legacy_summary = self.input_folder.parent / "cases_summary.csv"
+        summary_to_load = self.cases_summary_fn if self.cases_summary_fn.exists() else legacy_summary
+        if summary_to_load.exists():
             print("A Summary exists. Loading")
-            self.cases_summary = pd.read_csv(self.cases_summary_fn)
+            self.cases_summary = pd.read_csv(summary_to_load, dtype=str)
         else:
             print(
                 "A new dataset is initialized in folder {}".format(self.output_folder)
             )
             self.cases_summary = pd.DataFrame(columns=self.colnames)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-            filemode = "a" if not self.logfile.exists() else "w"
-            logging.basicConfig(
-                level=logging.INFO,
-                filename=self.logfile,
-                encoding="utf-8",
-                filemode=filemode,
-            )
+        root = logging.getLogger()
+        for handler in root.handlers[:]:
+            if getattr(handler, "_dicom_converter", False):
+                root.removeHandler(handler)
+                handler.close()
+        handler = logging.FileHandler(self.logfile, mode="a", encoding="utf-8")
+        handler._dicom_converter = True
+        root.addHandler(handler)
+        root.setLevel(logging.INFO)
 
     def generate_sitk_id(self, ind: int):
         id_number = int_to_str(ind, 5)
@@ -276,19 +298,15 @@ class DCMDatasetToSITK:
                 for case, ind in zip(new_cases, indices)
             ]
             dftmp = pd.DataFrame(cases_summary, columns=self.colnames)
-            self.cases_summary = pd.concat([self.cases_summary, dftmp])
+            self.cases_summary = pd.concat([self.cases_summary, dftmp], ignore_index=True)
         print(self.cases_summary)
 
     def save_cases_summary(self):
-        def _inner():
-            self.cases_summary.to_csv(self.cases_summary_fn, index=False)
-
-        if self.cases_summary_fn.exists():
-            ask_proceed(
-                "File {} already exists. Overwrite?".format(self.cases_summary_fn)
-            )(_inner)()
-        else:
-            _inner()
+        destination = self.cases_summary_fn
+        with tempfile.TemporaryDirectory(dir=destination.parent) as temporary_dir:
+            temporary_csv = Path(temporary_dir) / destination.name
+            self.cases_summary.to_csv(temporary_csv, index=False)
+            temporary_csv.replace(destination)
 
     def generate_indices(self, fill_gaps=True):
         taken_ids = list(self.cases_summary.sitk_id)
@@ -311,30 +329,38 @@ class DCMDatasetToSITK:
             [row.case_folder, row.sitk_id, sitk_ext, overwrite]
             for i, row in self.cases_summary.iterrows()
         ]
-        res = multiprocess_multiarg(self.process_single_case, args, 16, True, debug)
+        results = multiprocess_multiarg(self.process_single_case, args, 16, True, debug)
+        for i, result in zip(self.cases_summary.index, results):
+            if result is None:
+                result = {"status": "failed", "reason": "Worker failed without returning a result"}
+            logging.info("Case %s: %s; %s", self.cases_summary.loc[i, "case_folder"],
+                         result["status"], result["reason"])
+            for key, value in result.items():
+                self.cases_summary.loc[i, key] = value
+        self.save_cases_summary()
         print("Check {} for errors".format(self.logfile))
 
     def process_single_case(
-        self, dcm_folder, sitk_id, sitk_ext=".nii.gz", overwrite=True
+        self, dcm_folder, sitk_id, sitk_ext=".nii.gz", overwrite=False
     ):
-
-        D = DCMCaseToSITK(
-            self.dataset_name,
-            dcm_folder,
-            self.output_folder,
-            case_id=sitk_id,
-            tags=self.tags,
-            max_series_per_case=self.max_series_per_case,
-            min_files_per_series=self.min_files_per_series,
-            sitk_ext=".nii.gz",
-            include_modalities=self.include_modalities,
-            exclude_image_type_values=self.exclude_image_type_values,
-        )
-        D.process(overwrite=overwrite)
+        try:
+            case = DCMCaseToSITK(
+                self.dataset_name, dcm_folder, self.output_folder, case_id=sitk_id,
+                tags=self.tags, max_series_per_case=self.max_series_per_case,
+                min_files_per_series=self.min_files_per_series, sitk_ext=sitk_ext,
+                include_modalities=self.include_modalities,
+                exclude_image_type_values=self.exclude_image_type_values,
+            )
+            return case.process(overwrite=overwrite)
+        except Exception as exc:
+            logging.exception("Case %s failed", dcm_folder)
+            return {"status": "failed", "reason": f"{type(exc).__name__}: {exc}",
+                    "SeriesInstanceUID": "", "SeriesDescription": "", "SliceThickness": "",
+                    "source_file_count": ""}
 
     @property
     def cases_summary_fn(self):
-        return Path(self.input_folder.parent / ("cases_summary.csv"))
+        return self.output_folder.parent / "cases_summary.csv"
 
     @property
     def input_folder(self):
@@ -391,6 +417,8 @@ class DCMCaseToSITK:
         self.include_modalities = include_modalities
         self.exclude_image_type_values = exclude_image_type_values
         self.study_date = study_date
+        self._series_headers = {}
+        self._source_counts = {}
         # Preserve old behavior unless caller opts out.
         if self.exclude_image_type_values is None:
             self.exclude_image_type_values = list(_exclude.values())
@@ -404,12 +432,16 @@ class DCMCaseToSITK:
         return self.output_folder / output_filename
 
     def get_dcm_files(self, series_folder):
+        folder = Path(series_folder)
+        if folder not in self._series_headers:
+            self._series_headers[folder] = _series_header(folder)
+        header = self._series_headers[folder]
         self.reader = sitk.ImageSeriesReader()
-        nms = self.reader.GetGDCMSeriesFileNames(str(series_folder))
-        if len(nms) == 0:
-            return None, None
-        else:
-            return nms, dcmread(nms[0])
+        nms = self.reader.GetGDCMSeriesFileNames(str(folder), str(header.SeriesInstanceUID))
+        if not nms:
+            raise ValueError(f"No DICOM files for SeriesInstanceUID {header.SeriesInstanceUID} in {folder}")
+        self._source_counts[folder] = len(nms)
+        return nms, header
 
     def maybe_load_dcm(self, nms):
         self.reader.SetFileNames(nms)
@@ -418,9 +450,17 @@ class DCMCaseToSITK:
 
     def write_sitk(self, dcm_img, output_name):
         print("Saving dicom series as {}".format(output_name))
+        output_name = Path(output_name)
         writer = sitk.ImageFileWriter()
-        writer.SetFileName(str(output_name))
-        writer.Execute(dcm_img)
+        if not output_name.name.endswith((".nii", ".nii.gz")):
+            writer.SetFileName(str(output_name))
+            writer.Execute(dcm_img)
+            return
+        with tempfile.TemporaryDirectory(dir=output_name.parent) as temporary_dir:
+            temp_name = Path(temporary_dir) / output_name.name
+            writer.SetFileName(str(temp_name))
+            writer.Execute(dcm_img)
+            temp_name.replace(output_name)
 
     def dcmseries_to_sitk(self, series_folder, overwrite=False):
         """
@@ -441,11 +481,14 @@ class DCMCaseToSITK:
         return output_name
 
     def process(self, overwrite=False):
+        self._series_headers = {}
+        self._source_counts = {}
         candidate_folders = self.exclude_unsuitable()
         series_folders = select_series_folders_by_study(
             candidate_folders,
             study_date=self.study_date,
             case_folder=self.case_folder,
+            headers=self._series_headers,
         )
         num_seris = len(series_folders)
         logging.info(
@@ -454,13 +497,21 @@ class DCMCaseToSITK:
             )
         )
         if num_seris > self.max_series_per_case:
-            logging.warning(
-                "Number of series in case_folder exceeds {}. Please manually remove extra series and retry".format(
-                    self.max_series_per_case
-                )
-            )
-        else:
-            self.process_all_series(series_folders, overwrite)
+            raise ValueError(f"Number of study dates exceeds max_series_per_case={self.max_series_per_case}")
+        if not series_folders:
+            raise ValueError("No suitable axial CT series")
+        headers = [self._series_headers[folder] for folder in series_folders]
+        paths = [self.sitk_name_from_series(header) for header in headers]
+        skipped = [path.exists() and not overwrite for path in paths]
+        self.process_all_series(series_folders, overwrite)
+        return {
+            "status": "skipped" if all(skipped) else "converted",
+            "reason": "Output already exists" if all(skipped) else "",
+            "SeriesInstanceUID": ";".join(str(h.SeriesInstanceUID) for h in headers),
+            "SeriesDescription": ";".join(str(getattr(h, "SeriesDescription", "")) for h in headers),
+            "SliceThickness": ";".join(str(_slice_thickness_mm(h)) for h in headers),
+            "source_file_count": ";".join(str(self._source_counts[f]) for f in series_folders),
+        }
 
     def process_all_series(self, series_folders, overwrite):
         self.output_names=[]
@@ -478,10 +529,11 @@ class DCMCaseToSITK:
         """
         Parses subfolders and removes those which meet exclusion criteria
         """
-        delete_unwanted_files_folders(self.case_folder)
         folders = non_empty_subfolders(
             self.case_folder, min_files=self.min_files_per_series
         )
+        excluded = ("SECTRA", "README", "ComponentUpdate", "Viewer", "DICOMDIR")
+        folders = [f for f in folders if not any(x in str(f.relative_to(self.case_folder)) for x in excluded)]
         folders_suitable = il.filterfalse(self.meets_exclusion_criteria, folders)
 
         folders_suitable = [s for s in folders_suitable]
@@ -493,8 +545,8 @@ class DCMCaseToSITK:
 
 
         """
-        fns = list(dcm_fldr.glob("*"))
-        he = dcmread(fns[0])
+        he = _series_header(dcm_fldr)
+        self._series_headers[dcm_fldr] = he
         if self.include_modalities:
             keep_mods = {str(m).upper() for m in self.include_modalities}
             modality = str(getattr(he, "Modality", "")).upper()
