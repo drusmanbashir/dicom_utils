@@ -118,12 +118,10 @@ def _slice_thickness_mm(he) -> float:
     return float(getattr(he, "SliceThickness", 999))
 
 
-def pick_axial_series_folder(folders: list, min_mm: float = 0.8, max_mm: float = 1.2) -> Path | None:
+def pick_axial_series_folder(folders: list, min_mm: float = 0.8) -> Path | None:
     """One axial series per study; sagittal/coronal reformats never qualify.
 
-    1. Any axial series in [min_mm, max_mm]: the thinnest of those.
-    2. Else any thinner than min_mm: the thickest of those (closest to the band).
-    3. Else (all thicker than max_mm): the thinnest.
+    Any axial series thinner than min_mm: the thickest of those. Else the thinnest.
     Ties go to the series with more files. Missing SliceThickness counts as 999 mm.
     Returns None when no folder is axial.
     """
@@ -131,10 +129,7 @@ def pick_axial_series_folder(folders: list, min_mm: float = 0.8, max_mm: float =
     if not axial:
         return None
     nfiles = lambda f: sum(1 for p in f.iterdir() if p.is_file())
-    in_band = [a for a in axial if min_mm <= a[1] <= max_mm]
     below = [a for a in axial if a[1] < min_mm]
-    if in_band:
-        return min(in_band, key=lambda a: (a[1], -nfiles(a[0])))[0]
     if below:
         return max(below, key=lambda a: (a[1], nfiles(a[0])))[0]
     return min(axial, key=lambda a: (a[1], -nfiles(a[0])))[0]
