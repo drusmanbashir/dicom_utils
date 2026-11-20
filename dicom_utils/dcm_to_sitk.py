@@ -119,22 +119,16 @@ def _slice_thickness_mm(he) -> float:
 
 
 def pick_axial_series_folder(folders: list) -> Path | None:
-    """Thinnest axial series with 1.0-1.5 mm slices, else the thickest axial series.
+    """Thinnest axial series; sagittal/coronal reformats never qualify.
 
-    Returns None when no folder is axial.
+    Ties on SliceThickness go to the series with more files. Missing SliceThickness
+    sorts last (999). Returns None when no folder is axial.
     """
-    axial =[f for f in folders if _is_axial(_series_header(f))]
+    axial = [f for f in folders if _is_axial(_series_header(f))]
     if not axial:
         return None
-    in_band = [
-        (f, _slice_thickness_mm(_series_header(f)))
-        for f in axial
-        if 1.0 <= _slice_thickness_mm(_series_header(f)) <= 1.5
-    ]
-    if in_band:
-        in_band.sort(key=lambda x: x[1])
-        return in_band[0][0]
-    return max(axial, key=lambda f: _slice_thickness_mm(_series_header(f)))
+    nfiles = lambda f: sum(1 for p in f.iterdir() if p.is_file())
+    return min(axial, key=lambda f: (_slice_thickness_mm(_series_header(f)), -nfiles(f)))
 
 
 def select_series_folders_by_study(folders, study_date=None, case_folder=None):
@@ -266,13 +260,16 @@ class DCMDatasetToSITK:
                     self.cases_summary_fn
                 )
             )
+            new_cases = sorted(self.new_cases)
             if self.rename_sitk == True:
                 indices = self.generate_indices(fill_gaps=True)
             else:
-                indices = [fn.name for fn in self.cases]
+                # Folder names are the ids: pair each case with its own name, not a
+                # position in self.cases (new_cases is a subset once a summary exists).
+                indices = [fn.name for fn in new_cases]
             cases_summary = [
                 [str(case), self.generate_sitk_id(ind)]
-                for case, ind in zip(self.new_cases, indices)
+                for case, ind in zip(new_cases, indices)
             ]
             dftmp = pd.DataFrame(cases_summary, columns=self.colnames)
             self.cases_summary = pd.concat([self.cases_summary, dftmp])
