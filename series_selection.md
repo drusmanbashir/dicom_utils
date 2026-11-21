@@ -21,5 +21,8 @@ Per study date, convert one series for each distinct (body region, contrast phas
 
 `cases_summary.csv` gets one row per case, with `;`-joined `output`, `SeriesInstanceUID`, `SeriesDescription`, `SliceThickness` and `source_file_count` in the same order.
 
+## DAR043 run (2026-11-21, CPU VM, 1 h 55 min)
+211 files from 108 cases, 0 failed. Files per case: 1 file 16 cases, 2 files 81, 3 files 11. Images per series: soft 164–1017 (median 516, 122 series), lung 66–672 (median 312, 89 series). 26 GB. Six series raised ITK's "non uniform sampling or missing slices" warning (`run_1816.log`).
+
 ## Limits
 `max_series_per_case` caps study dates per case, not files. A case can now give several files per study.
