@@ -5,10 +5,15 @@ import pandas as pd
 import pytest
 from pydicom.dataset import FileDataset, FileMetaDataset
 from pydicom.uid import CTImageStorage, ExplicitVRLittleEndian, generate_uid
-from dicom_utils.dcm_to_sitk import DCMDatasetToSITK, _is_axial, _series_header, _slice_thickness_mm
+from dicom_utils.dcm_to_sitk import DCMDatasetToSITK, read_series
+from dicom_utils.series_selection import is_axial as _is_axial, slice_thickness_mm as _slice_thickness_mm
 
 
-def series(folder, *, date='20250101', thickness='1', desc='axial', uid=None, orientation=None):
+def _series_header(folder):
+    return read_series(folder).header
+
+
+def series(folder, *, date='20250101', thickness='1', desc='axial', uid=None, orientation=None, z0=0, span=1, kernel=None, number=1):
     folder.mkdir(parents=True, exist_ok=True)
     uid = uid or generate_uid()
     study = generate_uid()
@@ -29,7 +34,10 @@ def series(folder, *, date='20250101', thickness='1', desc='axial', uid=None, or
         if thickness is not None:
             ds.SliceThickness = thickness
         ds.ImageOrientationPatient = orientation or [1, 0, 0, 0, 1, 0]
-        ds.ImagePositionPatient = [0, 0, i]
+        ds.ImagePositionPatient = [0, 0, z0 + i * span]
+        ds.SeriesNumber = number
+        if kernel:
+            ds.ConvolutionKernel = kernel
         ds.Rows = ds.Columns = 2
         ds.PixelSpacing = [1, 1]
         ds.SamplesPerPixel = 1
@@ -195,7 +203,7 @@ def test_each_dicom_header_read_once(tmp_path, monkeypatch):
     result = d.process_single_case(str(tmp_path/'input'/'000001'), 'test_000001')
     assert result['status'] == 'converted'
     assert len(calls) == 2
-    assert calls[1][1]['specific_tags'] == ['SeriesInstanceUID']
+    assert calls[1][1]['specific_tags'] == ['SeriesInstanceUID', 'ImagePositionPatient']
 
 
 def test_missing_gdcm_files_is_failure(tmp_path, monkeypatch):

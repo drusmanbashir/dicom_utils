@@ -1,3 +1,5 @@
+import re
+
 import ipdb
 from dicom_utils.helpers import *
 tr = ipdb.set_trace
@@ -11,8 +13,11 @@ def human_readable_desc(text):
             text = text.replace(ch, "")
     return text.lower()
 
+series_desc = lambda inpt: re.sub(r"[^a-z0-9]", "", inpt.lower()) or "nodesc"
+
 _TRANSLATORS = {
-    'StudyDate': no_change, 
+    'StudyDate': no_change,
+    'SeriesDescription': series_desc,
     'SliceThickness': st,
     'StudyDescription':human_readable_desc
 }
@@ -20,7 +25,8 @@ _PLACEHOLDERS = {
    
     'StudyDate': 'nodate',
     'SliceThickness': '',
-    'StudyDescription': 'nodesc'
+    'StudyDescription': 'nodesc',
+    'SeriesDescription': 'nodesc',
 }
 
 @process_attr
